@@ -1,11 +1,8 @@
 # UnrealGDAL: Unreal Engine GDAL plugin
 
+This is a fork of TensorWork's UnrealGDAL Plugin, which upgrades the plugin to contemporary (UE5.3) engine versions and simplifies the dependency chain (removing ue4cli and ue4-conan) to make incorporating GDAL source builds easier.
+
 This plugin provides access to the [GDAL/OGR](https://gdal.org/) C++ API inside the Unreal Engine, allowing Unreal projects and plugins to easily import and manipulate geospatial data. In addition to providing access to the full GDAL/OGR C++ API surface, the plugin bundles the header-only [mergetiff](https://github.com/adamrehn/mergetiff-cxx) library for providing [convenient smart pointer types](./Source/UnrealGDAL/Public/SmartPointers.h), and includes [interoperability functionality](./Source/UnrealGDAL/Public/GDALHelpers.h) for accessing the GDAL/OGR API using native Unreal Engine datatypes.
-
-This plugin uses [conan-ue4cli](https://github.com/adamrehn/conan-ue4cli) to bundle GDAL and its dependencies in a cross-platform manner. Note that you will not need conan-ue4cli installed if you [use a binary release of the plugin](#using-release-binaries), but you will need conan-ue4cli installed and properly configured in order to [build the plugin and all of its dependencies from source](#building-everything-from-source).
-
-**Note that this plugin requires Unreal Engine version 4.25.0 or newer.**
-
 
 ## Contents
 
@@ -17,25 +14,35 @@ This plugin uses [conan-ue4cli](https://github.com/adamrehn/conan-ue4cli) to bun
 
 
 ## Installation
+Clone the repository to your Plugins directory. 
+
 
 ### Using release binaries
 
-You can download release binaries for the plugin from the [releases page](https://github.com/TensorWorks/UnrealGDAL/releases). These releases include [precomputed dependency data](https://docs.adamrehn.com/conan-ue4cli/read-these-first/concepts#precomputed-dependency-data) for GDAL and its dependencies, so you can simply copy the plugin directory into your project or Unreal Engine installation and start using it immediately without the need to install or configure conan-ue4cli. Release binaries are currently provided for 64-bit versions of Windows and Linux.
+You can download release binaries for the plugin from the releases page, so you can simply copy the plugin directory into your project or Unreal Engine installation and start using it immediately. Release binaries are currently provided for 64-bit versions of Windows.
 
 ### Building everything from source
+This plugin is effectively a container for linking against GDAL, and no longer has any built-in rules for a GDAL source build. Instead, you are expected to build GDAL separately and install the binaries to the root directory of the GDAL module (Where `GDAL.build.cs` is contained).
 
-To build the plugin from source without using the [precomputed dependency data](https://docs.adamrehn.com/conan-ue4cli/read-these-first/concepts#precomputed-dependency-data) included with the release binaries, you will need to [install and configure conan-ue4cli](https://docs.adamrehn.com/conan-ue4cli/workflow/installation). Once conan-ue4cli is installed and you have generated the wrapper packages for your version of the Unreal Engine, perform the following steps:
+The engine bundles `PROJ` and `sqlite3` as a module already, and you can tell CMAKE to link against it by pointing it to the engine path:
+```
+-DPROJ_LIBRARY_RELEASE = Path/To/Engine/Install/Engine/Plugins/Runtime/GeoReferencing/Source/ThirdParty/vcpkg-installed/overlay-x64-windows/lib/proj.lib
+-DPROJ_INCLUDE_DIR =  Path/To/Engine/Install/Engine/Plugins/Runtime/GeoReferencing/Source/ThirdParty/vcpkg-installed/overlay-x64-windows/include
+-DSQLite3_LIBRARY = Path/To/Engine/Install/Engine/Plugins/Runtime/GeoReferencing/Source/ThirdParty/vcpkg-installed/overlay-x64-windows/lib/sqlite3.lib
+-DSQLite3_INCLUDE_DIR = Path/To/Engine/Install/Engine/Plugins/Runtime/GeoReferencing/Source/ThirdParty/vcpkg-installed/overlay-x64-windows/include
+``` 
+Additionally, GDAL should be built as a Shared Lib: `-DBUILD_SHARED_LIBS=true`.
 
-1. Update the conan-ue4cli [recipe cache](https://docs.adamrehn.com/conan-ue4cli/read-these-first/concepts#recipe-cache) by running the [ue4 conan update](https://docs.adamrehn.com/conan-ue4cli/commands/update) command.
+GDAL should produce the following folders in your specified install directory (`CMAKE_INSTALL_PREFIX`):
+```
+bin/
+include/
+lib/
+share/
+```
+Copy these directly into the GDAL module directory (or even tell CMAKE to install them there).
 
-2. Build the Conan packages for the plugin's dependencies using the [ue4 conan build](https://docs.adamrehn.com/conan-ue4cli/commands/build) command:
-    
-    ```bash
-    # Build the packages for GDAL version 2.4.0 and mergetiff-cxx version 0.0.6
-    ue4 conan build "gdal-ue4==2.4.0" "mergetiff-ue4==0.0.6"
-    ```
-
-3. Once the Conan packages are built, you will be able to build or package any Unreal project which uses the UnrealGDAL plugin as normal.
+The engine bundled version of SQLite3 does not have the RTree extension, and so `-DOGR_ENABLE_DRIVER_SQLITE` should be `false` so that SQLite datasets (e.g. GPKG) don't attempt to use it. Link against your own build of SQLite to enable this driver. 
 
 
 ## Usage

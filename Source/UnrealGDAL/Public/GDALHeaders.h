@@ -1,16 +1,16 @@
 #pragma once
 
 //Configure mergetiff to use Unreal Engine smart pointers
-#include "Core/Public/Templates/UniquePtr.h"
+#include "Templates/UniquePtr.h"
 #define MERGETIFF_SMART_POINTER_TYPE TUniquePtr
 #define MERGETIFF_SMART_POINTER_GET(ptr) ptr.Get()
 #define MERGETIFF_SMART_POINTER_RELEASE(ptr) ptr.Release()
 #define MERGETIFF_SMART_POINTER_RESET(ptr, val) ptr.Reset(val)
 
 //Configure mergetiff to not use exceptions
-#include "Core/Public/CoreGlobals.h"
-#include "Core/Public/Containers/StringConv.h"
-#include "Core/Public/Logging/LogMacros.h"
+#include "CoreGlobals.h"
+#include "Containers/StringConv.h"
+#include "Logging/LogMacros.h"
 #define MERGETIFF_DISABLE_EXCEPTIONS 1
 #define MERGETIFF_ERROR_LOGGER(message) UE_LOG(LogTemp, Error, TEXT("%s"), UTF8_TO_TCHAR(message))
 

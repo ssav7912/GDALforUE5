@@ -4,8 +4,8 @@
 #include "HelperStructs.h"
 #include "SmartPointers.h"
 
-#include "Core/Public/Math/Vector.h"
-#include "Core/Public/Math/Vector2D.h"
+#include "Math/Vector.h"
+#include "Math/Vector2D.h"
 
 
 //Boilerplate macro for declaring our convenience functions for parsing utility options

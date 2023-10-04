@@ -1,0 +1,17 @@
+CONFIG_VERSION=3.8.0dev
+CONFIG_INST_PREFIX=C:/Users/Soren/gdalinstall
+CONFIG_INST_LIBS=-LIBPATH:C:/Users/Soren/gdalinstall/lib gdal
+CONFIG_INST_CFLAGS=-IC:/Users/Soren/gdalinstall/include
+CONFIG_INST_DATA=C:/Users/Soren/gdalinstall/share/gdal
+prefix=${CONFIG_INST_PREFIX}
+exec_prefix=${prefix}
+libdir=${exec_prefix}/lib
+includedir=${exec_prefix}/include
+datadir=${CONFIG_INST_DATA}
+
+Name: libgdal
+Description: Geospatial Data Abstraction Library
+Version: ${CONFIG_VERSION}
+Libs: ${CONFIG_INST_LIBS}
+Libs.private: wbemuuid ws2_32 "C:/Program Files/Epic Games/UE_5.3/Engine/Plugins/Runtime/GeoReferencing/Source/ThirdParty/vcpkg-installed/overlay-x64-windows/lib/sqlite3.lib" legacy_stdio_definitions.lib odbccp32.lib psapi "C:/Program Files/Epic Games/UE_5.3/Engine/Plugins/Runtime/GeoReferencing/Source/ThirdParty/vcpkg-installed/overlay-x64-windows/lib/proj.lib"
+Cflags: ${CONFIG_INST_CFLAGS}

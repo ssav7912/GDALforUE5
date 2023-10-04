@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Core/Public/Math/Vector2D.h"
+#include "Math/Vector2D.h"
 
 //Represents the corner coordinates of a GDAL raster dataset
 struct UNREALGDAL_API RasterCornerCoordinates

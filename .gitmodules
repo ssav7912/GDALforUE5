@@ -1,0 +1,3 @@
+[submodule "Source/UnrealGDAL/Public/mergetiff/mergetiff-cxx"]
+	path = Source/UnrealGDAL/Public/mergetiff/mergetiff-cxx
+	url = git@github.com:adamrehn/mergetiff-cxx.git

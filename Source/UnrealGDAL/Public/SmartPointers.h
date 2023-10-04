@@ -2,7 +2,7 @@
 
 #include "GDALHeaders.h"
 #include "HelperStructs.h"
-#include "Core/Public/Templates/UniquePtr.h"
+#include "Templates/UniquePtr.h"
 
 //Smart pointer type for affine transformation coefficients
 typedef TUniquePtr<double[]> GeoTransformRef;
