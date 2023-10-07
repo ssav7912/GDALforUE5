@@ -20,17 +20,8 @@
 			"Type": "Runtime",
 			"LoadingPhase": "Default",
 			"WhitelistPlatforms": [ "Win64" ]
-		},
-		{
-			"Name": "GDAL",
-			"Type": "Runtime",
-			"LoadingPhase": "Default"
 		}
-	],
-	"Plugins": [
-		{
-			"Name": "GeoReferencing",
-			"Enabled": true
-		}
+
 	]
+
 }

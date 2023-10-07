@@ -62,6 +62,7 @@ typedef MERGETIFF_SMART_POINTER_TYPE<char[], _CustomDeleterBaseVoid<CPLFree>> CP
 //Smart pointer type for GDAL datasets
 typedef MERGETIFF_SMART_POINTER_TYPE<GDALDataset, _GDALDatasetDeleter> GDALDatasetRef; 
 
+
 //Smart pointer type for OGR coordinate transformation objects
 _MERGETIFF_VOID_DELETER_SMART_POINTER(OGRCoordinateTransformation, OCTDestroyCoordinateTransformation);
 

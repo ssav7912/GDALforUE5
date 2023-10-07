@@ -56,10 +56,11 @@ if(_IMPORT_PREFIX STREQUAL "/")
 endif()
 
 # Create imported target GDAL::GDAL
-add_library(GDAL::GDAL SHARED IMPORTED)
+add_library(GDAL::GDAL STATIC IMPORTED)
 
 set_target_properties(GDAL::GDAL PROPERTIES
   INTERFACE_INCLUDE_DIRECTORIES "${_IMPORT_PREFIX}/include"
+  INTERFACE_LINK_LIBRARIES "\$<LINK_ONLY:wbemuuid>;\$<LINK_ONLY:PROJ::proj>;\$<LINK_ONLY:GEOS::GEOS>;\$<LINK_ONLY:PROJ::proj>;\$<LINK_ONLY:PROJ::proj>;\$<LINK_ONLY:GEOS::GEOS>;\$<LINK_ONLY:PROJ::proj>;\$<LINK_ONLY:GEOS::GEOS>;\$<LINK_ONLY:PROJ::proj>;\$<LINK_ONLY:ws2_32>;\$<LINK_ONLY:SQLite::SQLite3>;\$<LINK_ONLY:SQLite::SQLite3>;\$<LINK_ONLY:PROJ::proj>;\$<LINK_ONLY:SQLite::SQLite3>;\$<LINK_ONLY:SQLite::SQLite3>;\$<LINK_ONLY:GEOS::GEOS>;\$<LINK_ONLY:PROJ::proj>;\$<LINK_ONLY:psapi>;\$<LINK_ONLY:PROJ::proj>"
 )
 
 # Load information for each installed configuration.

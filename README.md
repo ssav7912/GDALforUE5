@@ -24,15 +24,6 @@ You can download release binaries for the plugin from the releases page, so you 
 ### Building everything from source
 This plugin is effectively a container for linking against GDAL, and no longer has any built-in rules for a GDAL source build. Instead, you are expected to build GDAL separately and install the binaries to the root directory of the GDAL module (Where `GDAL.build.cs` is contained).
 
-The engine bundles `PROJ` and `sqlite3` as a module already, and you can tell CMAKE to link against it by pointing it to the engine path:
-```
--DPROJ_LIBRARY_RELEASE = Path/To/Engine/Install/Engine/Plugins/Runtime/GeoReferencing/Source/ThirdParty/vcpkg-installed/overlay-x64-windows/lib/proj.lib
--DPROJ_INCLUDE_DIR =  Path/To/Engine/Install/Engine/Plugins/Runtime/GeoReferencing/Source/ThirdParty/vcpkg-installed/overlay-x64-windows/include
--DSQLite3_LIBRARY = Path/To/Engine/Install/Engine/Plugins/Runtime/GeoReferencing/Source/ThirdParty/vcpkg-installed/overlay-x64-windows/lib/sqlite3.lib
--DSQLite3_INCLUDE_DIR = Path/To/Engine/Install/Engine/Plugins/Runtime/GeoReferencing/Source/ThirdParty/vcpkg-installed/overlay-x64-windows/include
-``` 
-Additionally, GDAL should be built as a Shared Lib: `-DBUILD_SHARED_LIBS=true`.
-
 GDAL should produce the following folders in your specified install directory (`CMAKE_INSTALL_PREFIX`):
 ```
 bin/
@@ -42,7 +33,8 @@ share/
 ```
 Copy these directly into the GDAL module directory (or even tell CMAKE to install them there).
 
-The engine bundled version of SQLite3 does not have the RTree extension, and so `-DOGR_ENABLE_DRIVER_SQLITE` should be `false` so that SQLite datasets (e.g. GPKG) don't attempt to use it. Link against your own build of SQLite to enable this driver. 
+Any dependencies should be placed into `dependencies/`, with includes in `dependencies/include`. The number of dependencies will
+depend on your specific source build. The distributed build ships with PROJ, GEOS, NetCDF, libtiff, webp, zlib, libcurl, lerc and jpeg62, sourced from OSGEO.
 
 
 ## Usage
@@ -97,5 +89,12 @@ Binary releases of this plugin contain the following third-party libraries, whic
 - [GDAL](https://gdal.org/) ([X/MIT License](https://github.com/OSGeo/gdal/blob/master/gdal/LICENSE.TXT))
 - [GEOS](https://trac.osgeo.org/geos) ([LGPL-2.1 License](https://github.com/libgeos/geos/blob/master/COPYING))
 - [PROJ](https://proj.org/) ([X/MIT License](https://github.com/OSGeo/PROJ/blob/master/COPYING))
+- [netCDF](https://www.unidata.ucar.edu/software/netcdf/) ([2018 Unidata](https://docs.unidata.ucar.edu/netcdf-c/current/copyright.html))
+- [libtiff](http://www.libtiff.org/) ([Sam Leffler & SGI] (http://www.libtiff.org/misc.html))
+- [webp](https://developers.google.com/speed/webp) ([Google](https://www.webmproject.org/license/software/))
+- [zlib](https://www.zlib.net/manual.html) ([Jean-loup Gailly & Mark Adler](https://www.zlib.net/manual.html))
+- [libcurl](https://curl.se/libcurl/) ([curl license](https://curl.se/docs/copyright.html))
+- [Lerc](https://github.com/Esri/lerc) ([Apache 2.0](https://github.com/Esri/lerc/blob/master/LICENSE))
+- [jpeg62](https://gnuwin32.sourceforge.net/packages/jpeg.htm) ([Independent JPEG Group License] (https://spdx.org/licenses/IJG.html))
 
-GDAL and PROJ are linked statically, whereas GEOS is linked dynamically due to the [static linking requirements of the LGPL License](https://www.gnu.org/licenses/gpl-faq.en.html#LGPLStaticVsDynamic) and mergetiff is a header-only library. The source code for all of these libraries is bundled with binary releases of the plugin under the [ThirdParty](./ThirdParty) directory.
+GDAL and PROJ are linked statically, whereas GEOS is linked dynamically due to the [static linking requirements of the LGPL License](https://www.gnu.org/licenses/gpl-faq.en.html#LGPLStaticVsDynamic) and mergetiff is a header-only library. 

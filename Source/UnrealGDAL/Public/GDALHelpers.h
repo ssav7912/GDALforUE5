@@ -19,11 +19,13 @@ class UNREALGDAL_API GDALHelpers
 		
 		//------- DATASET ACCESS HELPERS -------
 		
+		//we force these inline due to module boundary problems ON WINDOWS. If we don't, calling this from another module would call into UnrealGDAL first, 
+		// which means any subsequent VSIMEM operations will diverge (as the other module keeps its own, separate heap).
 		//Attempts to open a raster dataset
-		static GDALDatasetRef OpenRaster(const FString& DatasetPath, bool bReadOnly = true, const TArray<FString>& OpenOptions = {});
+		FORCEINLINE static GDALDatasetRef OpenRaster(const FString& DatasetPath, bool bReadOnly = true, const TArray<FString>& OpenOptions = {});
 		
 		//Attempts to open a vector dataset
-		static GDALDatasetRef OpenVector(const FString& DatasetPath, bool bReadOnly = true, const TArray<FString>& OpenOptions = {});
+		FORCEINLINE static GDALDatasetRef OpenVector(const FString& DatasetPath, bool bReadOnly = true, const TArray<FString>& OpenOptions = {});
 		
 		//Creates a unique `/vsimem/...` filename to be used when creating in-memory datasets (e.g. for passing to GDALTranslate())
 		static FString UniqueMemFilename();
@@ -96,5 +98,5 @@ class UNREALGDAL_API GDALHelpers
 		#endif
 		
 		//Unreal-friendly wrappers for invoking common GDAL utility programs (currently just GDALTranslate())
-		static GDALDatasetRef Translate(GDALDatasetRef& Source, const FString& Destination, const GDALTranslateOptionsRef& Options);
+		FORCEINLINE static GDALDatasetRef Translate(GDALDatasetRef& Source, const FString& Destination, const GDALTranslateOptionsRef& Options);
 };
