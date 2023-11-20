@@ -32,17 +32,31 @@ public class GDAL : ModuleRules
 			//Console.WriteLine(dll);
 			RuntimeDependencies.Add(Path.Combine(binaryStagingDir, Path.GetFileName(dll)), dll, StagedFileType.NonUFS);
 		}
-		//add data files
-		var datafiles = Directory.GetFiles(Path.Combine(ModuleDirectory, "share", "gdal"), "*",
-			SearchOption.AllDirectories);
+
+		var datadirs = Directory.GetDirectories(Path.Combine(ModuleDirectory, "share"), "*");
+
 		if (!Directory.Exists(stagingDir))
 		{
 			Directory.CreateDirectory(stagingDir);
 		}
-		foreach (string data in datafiles)
+		foreach (string dir in datadirs)
 		{
-			RuntimeDependencies.Add(Path.Combine(stagingDir, Path.GetFileName(data)), data, StagedFileType.NonUFS);
-		}
+			string StagedDataDir = Path.Combine(stagingDir, Path.GetFileName(dir));
+			System.Console.WriteLine(StagedDataDir);
+
+			if (!Directory.Exists(StagedDataDir))
+			{
+				Directory.CreateDirectory(StagedDataDir);
+			}
+			foreach (string file in Directory.GetFiles(dir, "*"))
+			{
+                RuntimeDependencies.Add(Path.Combine(StagedDataDir, Path.GetFileName(file)), file, StagedFileType.NonUFS);
+
+            }
+
+
+        }
+
 
 		//stage dependencies
 		PublicIncludePaths.Add(Path.Combine(ModuleDirectory, "dependencies", "include"));

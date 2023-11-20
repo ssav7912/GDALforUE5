@@ -11,6 +11,33 @@ typedef TUniquePtr<double[]> GeoTransformRef;
 typedef TUniquePtr<RasterCornerCoordinates> RasterCornerCoordinatesRef;
 typedef TUniquePtr<RasterMinMax> RasterMinMaxRef;
 
+
+struct VSILFILERef
+{
+	VSILFILERef() = delete;
+	VSILFILERef(const TArray<uint8>& Buffer)
+	{
+		VSIFileName = CPLString("/vsimem/") + StringCast<ANSICHAR>(*FGuid::NewGuid().ToString()).Get();
+		FileHandle = VSIFileFromMemBuffer(VSIFileName, const_cast<GByte*>(Buffer.GetData()), Buffer.Num(), false);
+	}
+	VSILFILERef(const char* Filename, VSILFILE* Handle) : VSIFileName(Filename), FileHandle(Handle) {}
+
+	
+	CPLString VSIFileName;
+	VSILFILE* FileHandle;
+
+	~VSILFILERef()
+	{
+		
+		VSIFCloseL(FileHandle);
+		VSIUnlink(VSIFileName);
+	}
+};
+
+using OGRGeometryRef = TUniquePtr<OGRGeometry, mergetiff::_CustomDeleterBaseT<OGRGeometry, OGRGeometryFactory::destroyGeometry>>;
+using OGRFeatureRef = TUniquePtr<OGRFeature, mergetiff::_CustomDeleterBaseT<OGRFeature, OGRFeature::DestroyFeature>>;
+
+
 //Alias the smart pointer types provided by mergetiff
 typedef mergetiff::CPLStringRef CPLStringRef;
 typedef mergetiff::GDALDatasetRef GDALDatasetRef;

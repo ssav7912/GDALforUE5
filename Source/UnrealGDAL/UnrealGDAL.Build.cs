@@ -10,7 +10,8 @@ public class UnrealGDAL : ModuleRules
 			new string[]
 			{
 				"Core",
-				"GDAL"
+				"GDAL",
+				"UnrealEd"
 			}
 		);
 		
