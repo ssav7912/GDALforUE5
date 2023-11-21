@@ -45,8 +45,16 @@ void UGDALDataset::PostLoad()
 
 void UGDALDataset::BeginDestroy()
 {
-	VSIFCloseL(this->UnderlyingFileHandle);
-	VSIUnlink(StringCast<ANSICHAR>(*this->UnderlyingFileName).Get());
+	if (!this->UnderlyingFileName.IsEmpty() && this->UnderlyingFileHandle)
+	{
+		VSIFCloseL(this->UnderlyingFileHandle);
+		VSIUnlink(StringCast<ANSICHAR>(*this->UnderlyingFileName).Get());
+	}
+	else {
+		ensure(!this->Dataset.IsValid() /*Should not have a valid dataset and an invalid VSI File handle! This object has probably leaked!*/);
+	}
+
+	
 	UObject::BeginDestroy();
 }
 

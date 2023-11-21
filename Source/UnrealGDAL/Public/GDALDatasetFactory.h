@@ -19,4 +19,6 @@ class UNREALGDAL_API UGDALDatasetFactory : public UFactory
 	
 	
 	virtual UObject* FactoryCreateFile(UClass* InClass, UObject* InParent, FName InName, EObjectFlags Flags, const FString& Filename, const TCHAR* Parms, FFeedbackContext* Warn, bool& bOutOperationCanceled) override;
+
+	virtual bool FactoryCanImport(const FString& Filename) override;
 };

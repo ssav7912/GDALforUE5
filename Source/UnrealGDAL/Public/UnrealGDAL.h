@@ -39,4 +39,6 @@ public:
 	
 	//Our custom error handler for logging errors emitted by GDAL
 	static void GDALErrorHandler(CPLErr err, int num, const char* message);
+private:
+	TSharedPtr<class IAssetTypeActions> Action;
 };

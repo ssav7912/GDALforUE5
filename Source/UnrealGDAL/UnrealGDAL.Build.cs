@@ -19,7 +19,8 @@ public class UnrealGDAL : ModuleRules
 			new string[]
 			{
 				"CoreUObject",
-				"Engine"
+				"Engine",
+				"AssetTools"
 			}
 		);
 	}
