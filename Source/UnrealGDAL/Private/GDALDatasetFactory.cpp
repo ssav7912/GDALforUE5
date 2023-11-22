@@ -8,14 +8,12 @@
 
 UGDALDatasetFactory::UGDALDatasetFactory()
 {
-	this->Formats.Add("fgb; FlatGeoBuf");
-	this->Formats.Add("geojson; GeoJSON");
-	this->Formats.Add("gtiff; GeoTiff");
-	this->Formats.Add("gtif; GeoTiff");
+	this->Formats.Append(GetDriverFileExtensions());
 	this->SupportedClass = UGDALDataset::StaticClass();
 	this->bCreateNew = false;
 	this->bEditorImport = true;
 }
+
 
 UObject* UGDALDatasetFactory::FactoryCreateFile(UClass* InClass, UObject* InParent, FName InName, EObjectFlags Flags,
 	const FString& Filename, const TCHAR* Parms, FFeedbackContext* Warn, bool& bOutOperationCanceled)
@@ -61,4 +59,28 @@ bool UGDALDatasetFactory::FactoryCanImport(const FString& Filename)
 		return true;
 	}
 	return false;
+}
+
+TArray<FString> UGDALDatasetFactory::GetDriverFileExtensions()
+{
+	TArray<FString> Drivers;
+	int32 DriverCount = GDALGetDriverCount();
+	for (int32 i = 0; i < DriverCount; i++)
+	{
+		GDALDriver* Driver = GDALDriver::FromHandle(GDALGetDriver(i));
+
+		FString DriverExtension = Driver->GetMetadataItem(GDAL_DMD_EXTENSION);
+		FString DriverShortName = GDALGetDriverLongName(Driver);
+
+		if (!DriverExtension.IsEmpty() && !DriverShortName.IsEmpty())
+		{
+			FString DriverName = DriverExtension + FString{ ";" } + DriverShortName;
+			Drivers.Add(DriverName);
+		}
+
+		
+	}
+	
+
+	return Drivers;
 }

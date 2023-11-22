@@ -2,6 +2,7 @@
 #include "GDALHelpers.h"
 #include "Logging/StructuredLog.h"
 #include "GDALDatasetTypeActions.h"
+#include "Misc/CoreDelegates.h"
 
 #define LOCTEXT_NAMESPACE "FUnrealGDALModule"
 
@@ -11,9 +12,13 @@ void FUnrealGDALModule::StartupModule() {
 	this->InitGDAL();
 
 	Action = MakeShareable(new FGDALDatasetTypeActions());
-	IAssetTools& AssetTools = FModuleManager::LoadModuleChecked<FAssetToolsModule>("AssetTools").Get();
-	AssetTools.RegisterAssetTypeActions(Action.ToSharedRef());
 	
+	//due to our module load order we need to wait until UObject CDOs are initialised before we can register the asset type.
+	FCoreDelegates::OnPostEngineInit.AddLambda([ActionRef = Action.ToSharedRef()]
+		{
+			IAssetTools& AssetTools = FModuleManager::LoadModuleChecked<FAssetToolsModule>("AssetTools").Get();
+			AssetTools.RegisterAssetTypeActions(ActionRef);
+		});
 
 }
 

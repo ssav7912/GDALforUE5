@@ -18,7 +18,7 @@
 		{
 			"Name": "UnrealGDAL",
 			"Type": "Runtime",
-			"LoadingPhase": "Default",
+			"LoadingPhase": "PreEarlyLoadingScreen",
 			"WhitelistPlatforms": [ "Win64" ]
 		}
 
