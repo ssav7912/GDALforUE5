@@ -24,9 +24,8 @@ public class GDAL : ModuleRules
 		var dlls = new List<string>(Directory.GetFiles(Path.Combine(ModuleDirectory, "lib"), "*" + ".dll"));
 		dlls.AddRange(Directory.GetFiles(Path.Combine(ModuleDirectory, "lib", "gdalplugins"), "*" + ".dll"));
 		dlls.AddRange(Directory.GetFiles(Path.Combine(ModuleDirectory, "bin"), "*" + ".dll"));
-        string stagingDir = Path.Combine("$(ProjectDir)", "Binaries", "Data", "GDAL");
-		string binaryStagingDir = Path.Combine("$(ProjectDir)", "Binaries", "Win64");
-
+        string stagingDir = Path.Combine("$(PluginDir)", "Binaries", "Data", "GDAL");
+		string binaryStagingDir = Path.Combine("$(PluginDir)", "Binaries", "Win64");
         foreach (string dll in dlls)
 		{
 			//Console.WriteLine(dll);
