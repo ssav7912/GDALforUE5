@@ -49,7 +49,8 @@ class _CustomDeleterBaseVoid
 			DeleterFunc(v);
 		}
 };
-
+	
+	
 //Boilerplate macros for declaring our smart pointer types
 #define _MERGETIFF_VOID_DELETER_SMART_POINTER(dtype, callback) typedef MERGETIFF_SMART_POINTER_TYPE<dtype, _CustomDeleterBaseVoid<callback>> dtype##Ref
 #define _MERGETIFF_T_DELETER_SMART_POINTER(dtype, callback) typedef MERGETIFF_SMART_POINTER_TYPE<dtype, _CustomDeleterBaseT<dtype, callback>> dtype##Ref
